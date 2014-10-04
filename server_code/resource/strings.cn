@@ -1,0 +1,10 @@
+﻿<?php
+
+function getLocalizationStringMap()
+{
+  return array("AUTHENTICATION_PASSED"=>"验证通过"，
+  "NO_SUCH_USER"=>"查无此人",
+  "WRONG_PWD"=>"密码错误");
+}
+
+?>
