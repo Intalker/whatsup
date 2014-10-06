@@ -44,11 +44,40 @@ public class PortraitTimeLineView extends FrameLayout
 
 	private void addTestNodes(Context context)
 	{
-		for (int i = 0; i < 20; ++i)
+		for (int i = 0; i < 100; ++i)
 		{
-			TimeLineNodeView nodeView = new TimeLineNodeView(context, R.drawable.mosquitoes, "Event test text: " + (i + 1));
-			nodeView.setShowSide(i % 2 == 0);
-			mNodeLinearLayout.addView(nodeView);
+			int iconResId = -1;
+			switch (i % 6)
+			{
+				case 0:
+					iconResId = R.drawable.cherry;
+					break;
+				case 1:
+					iconResId = R.drawable.orange;
+					break;
+				case 2:
+					iconResId = R.drawable.watermelon;
+					break;
+				case 3:
+					iconResId = R.drawable.tomato;
+					break;
+				case 4:
+					iconResId = R.drawable.kiwi;
+					break;
+				case 5:
+					iconResId = R.drawable.grape;
+					break;
+				default:
+					break;
+			}
+			TimeLineNodeView nodeView = new TimeLineNodeView(
+					context,
+					iconResId,
+					"Event No. "
+							+ (i + 1)
+							+ "\nTest text Test text Test text Test text Test text Test text Test text ");
+			nodeView.setDisplaySide(i % 2 == 0);
+			mNodeLinearLayout.addView(nodeView, 0);
 		}
 	}
 }
