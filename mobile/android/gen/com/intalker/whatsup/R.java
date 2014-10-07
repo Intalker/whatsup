@@ -1076,8 +1076,9 @@ containing a value of this type.
         public static final int mosquitoes=0x7f02005c;
         public static final int msg_bg=0x7f02005d;
         public static final int orange=0x7f02005e;
-        public static final int tomato=0x7f02005f;
-        public static final int watermelon=0x7f020060;
+        public static final int round_bg=0x7f02005f;
+        public static final int tomato=0x7f020060;
+        public static final int watermelon=0x7f020061;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
