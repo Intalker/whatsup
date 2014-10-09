@@ -1,11 +1,13 @@
 package com.intalker.whatsup.ui;
 
 import com.intalker.whatsup.R;
+import com.intalker.whatsup.util.ColorUtil;
 import com.intalker.whatsup.util.DensityAdaptor;
 import com.intalker.whatsup.widget.SpecTextView;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils.TruncateAt;
@@ -57,6 +59,7 @@ public class TimeLineNodeView extends LinearLayout
 
 	private void createUI(Context context)
 	{
+//		this.setBackgroundColor(ColorUtil.generateRandomColor());
 		this.setOrientation(LinearLayout.VERTICAL);
 
 		int horiMargin = 0;
@@ -151,10 +154,14 @@ public class TimeLineNodeView extends LinearLayout
 		LinearLayout.LayoutParams detailTextLP = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
+//		detailTextLP.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		this.addView(mDetailTextView, detailTextLP);
+		mDetailTextView.setScaleX(0);
+		mDetailTextView.setScaleY(0);
 		mDetailTextView.setVisibility(View.GONE);
-//		mDetailTextView.setScaleY(0.1f);
 	}
+
+	private boolean mDetailInfoDisplayed = false;
 
 	private void addListeners()
 	{
@@ -163,36 +170,38 @@ public class TimeLineNodeView extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
-				if (mDetailTextView.getVisibility() == View.GONE)
+				// if (mDetailTextView.getVisibility() == View.GONE)
+				if (!mDetailInfoDisplayed)
 				{
-					mDetailTextView.setVisibility(View.VISIBLE);
-					//updateDetailTextViewWithAnimation(1);
-					if (mDisplayOnLeft)
-					{
-						mLeftTextView.setVisibility(View.INVISIBLE);
-					} else
-					{
-						mRightTextView.setVisibility(View.INVISIBLE);
-					}
+					// mDetailTextView.setVisibility(View.VISIBLE);
+					updateDetailTextViewWithAnimation(1);
+//					if (mDisplayOnLeft)
+//					{
+//						mLeftTextView.setVisibility(View.INVISIBLE);
+//					} else
+//					{
+//						mRightTextView.setVisibility(View.INVISIBLE);
+//					}
 				} else
 				{
-					mDetailTextView.setVisibility(View.GONE);
-					//updateDetailTextViewWithAnimation(0);
-					if (mDisplayOnLeft)
-					{
-						mLeftTextView.setVisibility(View.VISIBLE);
-					} else
-					{
-						mRightTextView.setVisibility(View.VISIBLE);
-					}
+					// mDetailTextView.setVisibility(View.GONE);
+					updateDetailTextViewWithAnimation(0);
+//					if (mDisplayOnLeft)
+//					{
+//						mLeftTextView.setVisibility(View.VISIBLE);
+//					} else
+//					{
+//						mRightTextView.setVisibility(View.VISIBLE);
+//					}
 				}
 			}
 		});
 	}
 
-	private void updateDetailTextViewWithAnimation(float toYScale)
+	private void updateDetailTextViewWithAnimation(float detailMsgToScale)
 	{
-		mDetailTextView.animate().setDuration(2000).scaleX(1).scaleY(toYScale)
+		//ValueAnimator anim = ValueAnimator.ofInt(mDetailTextView, "translationY", 0f, mDetailTextView.getHeight());
+		mDetailTextView.animate().setDuration(500).scaleX(detailMsgToScale).scaleY(detailMsgToScale)
 				.translationX(0).translationY(0)
 				.setInterpolator(new AccelerateDecelerateInterpolator())
 				.setListener(new AnimatorListener()
@@ -201,15 +210,20 @@ public class TimeLineNodeView extends LinearLayout
 					@Override
 					public void onAnimationStart(Animator animation)
 					{
-						// TODO Auto-generated method stub
-
+						if (!mDetailInfoDisplayed)
+						{
+							mDetailTextView.setVisibility(View.VISIBLE);
+						}
 					}
 
 					@Override
 					public void onAnimationEnd(Animator animation)
 					{
-						// TODO Auto-generated method stub
-
+						if (mDetailInfoDisplayed)
+						{
+							mDetailTextView.setVisibility(View.GONE);
+						}
+						mDetailInfoDisplayed = !mDetailInfoDisplayed;
 					}
 
 					@Override
@@ -227,5 +241,17 @@ public class TimeLineNodeView extends LinearLayout
 					}
 
 				});
+		float titleToScale = detailMsgToScale == 0 ? 1f : 0;
+		if (mDisplayOnLeft)
+		{
+			mLeftTextView.animate().setDuration(500).alpha(titleToScale)//.scaleX(titleToScale).scaleY(titleToScale)
+			.translationX(0).translationY(0)
+			.setInterpolator(new AccelerateDecelerateInterpolator());
+		} else
+		{
+			mRightTextView.animate().setDuration(500).alpha(titleToScale)//.scaleX(titleToScale).scaleY(titleToScale)
+			.translationX(0).translationY(0)
+			.setInterpolator(new AccelerateDecelerateInterpolator());
+		}
 	}
 }
